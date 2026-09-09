@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wisdom Exam Works - Online Quiz</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6f9;
+      color: #222;
+    }
+
+    .header {
+      background: #172554;
+      color: white;
+      padding: 18px 25px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 25px;
+    }
+
+    .header p {
+      margin-top: 5px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 35px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .start-screen {
+      text-align: center;
+    }
+
+    .start-screen h2 {
+      font-size: 28px;
+      margin-bottom: 15px;
+      color: #172554;
+    }
+
+    .start-screen p {
+      margin-bottom: 25px;
+      color: #555;
+    }
+
+    .info {
+      background: #f1f5f9;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      line-height: 1.8;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 12px 25px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .start-btn {
+      background: #172554;
+      color: white;
+    }
+
+    .start-btn:hover {
+      background: #1e3a8a;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      gap: 15px;
+    }
+
+    .question-number {
+      font-weight: bold;
+      color: #172554;
+    }
+
+    .timer {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .question {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    .option {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .option:hover {
+      border-color: #172554;
+      background: #eff6ff;
+    }
+
+    .option.selected {
+      border-color: #172554;
+      background: #dbeafe;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    .prev-btn {
+      background: #64748b;
+      color: white;
+    }
+
+    .next-btn {
+      background: #172554;
+      color: white;
+    }
+
+    .submit-btn {
+      background: #15803d;
+      color: white;
+    }
+
+    .result {
+      text-align: center;
+    }
+
+    .result h2 {
+      color: #172554;
+      margin-bottom: 20px;
+    }
+
+    .score {
+      font-size: 45px;
+      font-weight: bold;
+      margin: 20px;
+      color: #15803d;
+    }
+
+    .restart-btn {
+      background: #172554;
+      color: white;
+      margin-top: 20px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 15px auto;
+        padding: 10px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .quiz-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .question {
+        font-size: 18px;
+      }
+
+      .navigation {
+        gap: 10px;
+      }
+
+      button {
+        padding: 10px 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>WISDOM EXAM WORKS</h1>
+    <p>Online Examination Portal</p>
+  </div>
+
+  <div class="container">
+
+    <!-- START SCREEN -->
+    <div class="card start-screen" id="startScreen">
+      <h2>Online Quiz</h2>
+
+      <p>Test your knowledge with Wisdom Exam Works.</p>
+
+      <div class="info">
+        <div><strong>Total Questions:</strong> 5</div>
+        <div><strong>Time:</strong> 5 Minutes</div>
+        <div><strong>Each Question:</strong> 1 Mark</div>
+      </div>
+
+      <button class="start-btn" onclick="startQuiz()">
+        START QUIZ
+      </button>
+    </div>
+
+
+    <!-- QUIZ SCREEN -->
+    <div class="card hidden" id="quizScreen">
+
+      <div class="quiz-header">
+        <div class="question-number" id="questionNumber">
+          Question 1 of 5
+        </div>
+
+        <div class="timer" id="timer">
+          05:00
+        </div>
+      </div>
+
+      <div class="question" id="questionText"></div>
+
+      <div id="options"></div>
+
+      <div class="navigation">
+
+        <button
+          class="prev-btn"
+          id="prevBtn"
+          onclick="previousQuestion()">
+          Previous
+        </button>
+
+        <button
+          class="next-btn"
+          id="nextBtn"
+          onclick="nextQuestion()">
+          Next
+        </button>
+
+        <button
+          class="submit-btn hidden"
+          id="submitBtn"
+          onclick="submitQuiz()">
+          Submit
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- RESULT SCREEN -->
+    <div class="card result hidden" id="resultScreen">
+
+      <h2>Quiz Completed 🎉</h2>
+
+      <p>Your Score</p>
+
+      <div class="score" id="score"></div>
+
+      <p id="resultMessage"></p>
+
+      <button
+        class="restart-btn"
+        onclick="restartQuiz()">
+        TRY AGAIN
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    // ==========================================
+    // QUIZ QUESTIONS
+    // ==========================================
+
+    const questions = [
+
+      {
+        question: "What is the capital of India?",
+        options: [
+          "Mumbai",
+          "New Delhi",
+          "Kolkata",
+          "Chennai"
+        ],
+        answer: 1
+      },
+
+      {
+        question: "Which planet is known as the Red Planet?",
+        options: [
+          "Earth",
+          "Venus",
+          "Mars",
+          "Jupiter"
+        ],
+        answer: 2
+      },
+
+      {
+        question: "Who is known as the Father of the Indian Constitution?",
+        options: [
+          "Mahatma Gandhi",
+          "Dr. B. R. Ambedkar",
+          "Jawaharlal Nehru",
+          "Sardar Patel"
+        ],
+        answer: 1
+      },
+
+      {
+        question: "What is the national animal of India?",
+        options: [
+          "Lion",
+          "Elephant",
+          "Tiger",
+          "Leopard"
+        ],
+        answer: 2
+      },
+
+      {
+        question: "Which is the largest planet in our Solar System?",
+        options: [
+          "Earth",
+          "Saturn",
+          "Jupiter",
+          "Neptune"
+        ],
+        answer: 2
+      }
+
+    ];
+
+
+    // ==========================================
+    // VARIABLES
+    // ==========================================
+
+    let currentQuestion = 0;
+    let userAnswers = [];
+    let timeLeft = 300;
+    let timerInterval;
+
+
+    // ==========================================
+    // START QUIZ
+    // ==========================================
+
+    function startQuiz() {
+
+      currentQuestion = 0;
+      userAnswers = new Array(questions.length).fill(null);
+      timeLeft = 300;
+
+      document.getElementById("startScreen")
+        .classList.add("hidden");
+
+      document.getElementById("quizScreen")
+        .classList.remove("hidden");
+
+      showQuestion();
+
+      startTimer();
+    }
+
+
+    // ==========================================
+    // SHOW QUESTION
+    // ==========================================
+
+    function showQuestion() {
+
+      const q = questions[currentQuestion];
+
+      document.getElementById("questionNumber").innerText =
+        "Question " +
+        (currentQuestion + 1) +
+        " of " +
+        questions.length;
+
+      document.getElementById("questionText").innerText =
+        q.question;
+
+      const optionsContainer =
+        document.getElementById("options");
+
+      optionsContainer.innerHTML = "";
+
+      q.options.forEach((option, index) => {
+
+        const div = document.createElement("div");
+
+        div.className = "option";
+
+        if (userAnswers[currentQuestion] === index) {
+          div.classList.add("selected");
+        }
+
+        div.innerText =
+          String.fromCharCode(65 + index) +
+          ". " +
+          option;
+
+        div.onclick = function() {
+          selectAnswer(index);
+        };
+
+        optionsContainer.appendChild(div);
+
+      });
+
+
+      // Previous button
+
+      document.getElementById("prevBtn")
+        .style.visibility =
+        currentQuestion === 0 ? "hidden" : "visible";
+
+
+      // Last question
+
+      if (currentQuestion === questions.length - 1) {
+
+        document.getElementById("nextBtn")
+          .classList.add("hidden");
+
+        document.getElementById("submitBtn")
+          .classList.remove("hidden");
+
+      } else {
+
+        document.getElementById("nextBtn")
+          .classList.remove("hidden");
+
+        document.getElementById("submitBtn")
+          .classList.add("hidden");
+
+      }
+
+    }
+
+
+    // ==========================================
+    // SELECT ANSWER
+    // ==========================================
+
+    function selectAnswer(index) {
+
+      userAnswers[currentQuestion] = index;
+
+      showQuestion();
+
+    }
+
+
+    // ==========================================
+    // NEXT QUESTION
+    // ==========================================
+
+    function nextQuestion() {
+
+      if (currentQuestion < questions.length - 1) {
+
+        currentQuestion++;
+
+        showQuestion();
+
+      }
+
+    }
+
+
+    // ==========================================
+    // PREVIOUS QUESTION
+    // ==========================================
+
+    function previousQuestion() {
+
+      if (currentQuestion > 0) {
+
+        currentQuestion--;
+
+        showQuestion();
+
+      }
+
+    }
+
+
+    // ==========================================
+    // TIMER
+    // ==========================================
+
+    function startTimer() {
+
+      clearInterval(timerInterval);
+
+      timerInterval = setInterval(function() {
+
+        timeLeft--;
+
+        updateTimer();
+
+        if (timeLeft <= 0) {
+
+          clearInterval(timerInterval);
+
+          submitQuiz();
+
+        }
+
+      }, 1000);
+
+    }
+
+
+    function updateTimer() {
+
+      let minutes =
+        Math.floor(timeLeft / 60);
+
+      let seconds =
+        timeLeft % 60;
+
+      minutes =
+        String(minutes).padStart(2, "0");
+
+      seconds =
+        String(seconds).padStart(2, "0");
+
+      document.getElementById("timer").innerText =
+        minutes + ":" + seconds;
+
+    }
+
+
+    // ==========================================
+    // SUBMIT QUIZ
+    // ==========================================
+
+    function submitQuiz() {
+
+      clearInterval(timerInterval);
+
+      let score = 0;
+
+      questions.forEach((q, index) => {
+
+        if (userAnswers[index] === q.answer) {
+          score++;
+        }
+
+      });
+
+      document.getElementById("quizScreen")
+        .classList.add("hidden");
+
+      document.getElementById("resultScreen")
+        .classList.remove("hidden");
+
+      document.getElementById("score").innerText =
+        score + " / " + questions.length;
+
+
+      let percentage =
+        (score / questions.length) * 100;
+
+
+      if (percentage >= 80) {
+
+        document.getElementById("resultMessage").innerText =
+          "Excellent! Keep up the great work! 🔥";
+
+      } else if (percentage >= 50) {
+
+        document.getElementById("resultMessage").innerText =
+          "Good job! Keep practising! 💪";
+
+      } else {
+
+        document.getElementById("resultMessage").innerText =
+          "Keep learning and try again! 📚";
+
+      }
+
+    }
+
+
+    // ==========================================
+    // RESTART
+    // ==========================================
+
+    function restartQuiz() {
+
+      document.getElementById("resultScreen")
+        .classList.add("hidden");
+
+      document.getElementById("startScreen")
+        .classList.remove("hidden");
+
+    }
+
+  </script>
+
+</body>
+</html>
