@@ -1,648 +1,1465 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wisdom Exam Works - Online Quiz</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
+<title>Wisdom Exam Works - Online Quiz</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#f1f8f7;
+    color:#172554;
+}
+
+/* ================= HEADER ================= */
+
+.header{
+    background:linear-gradient(135deg,#075e68,#087f82);
+    color:white;
+    padding:18px 30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+.logo h1{
+    font-size:25px;
+    letter-spacing:.5px;
+}
+
+.logo p{
+    margin-top:4px;
+    font-size:13px;
+    opacity:.9;
+}
+
+.timer-box{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.timer{
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.35);
+    padding:10px 18px;
+    border-radius:10px;
+    font-weight:bold;
+    font-size:18px;
+}
+
+.end-btn{
+    background:#ef6b6b;
+    color:white;
+    border:none;
+    padding:11px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+/* ================= CONTAINER ================= */
+
+.container{
+    max-width:1250px;
+    margin:25px auto;
+    padding:0 18px;
+}
+
+/* ================= TOP INFO ================= */
+
+.exam-info{
+    background:white;
+    border:1px solid #ccebea;
+    border-radius:14px;
+    padding:18px 25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+
+.exam-title h2{
+    font-size:22px;
+}
+
+.exam-title p{
+    color:#64748b;
+    margin-top:5px;
+}
+
+.stats{
+    display:flex;
+    gap:30px;
+    text-align:center;
+}
+
+.stat strong{
+    display:block;
+    font-size:22px;
+}
+
+.stat span{
+    font-size:12px;
+    color:#64748b;
+}
+
+.green-text{
+    color:#16a05d;
+}
+
+.red-text{
+    color:#ef4444;
+}
+
+.blue-text{
+    color:#3159d8;
+}
+
+/* ================= MAIN GRID ================= */
+
+.main-grid{
+    display:grid;
+    grid-template-columns:1fr 330px;
+    gap:20px;
+}
+
+/* ================= QUESTION CARD ================= */
+
+.question-card{
+    background:white;
+    border-radius:14px;
+    padding:28px;
+    border:1px solid #d5eeee;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
+
+.question-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #e2eeee;
+    padding-bottom:15px;
+    margin-bottom:25px;
+}
+
+.question-number{
+    font-size:17px;
+    font-weight:bold;
+}
+
+.mark-btn{
+    background:white;
+    border:1px solid #9bbfc2;
+    color:#075e68;
+    padding:9px 15px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.mark-btn.marked{
+    background:#3159d8;
+    color:white;
+    border-color:#3159d8;
+}
+
+.question-text{
+    font-size:21px;
+    font-weight:bold;
+    line-height:1.5;
+    margin-bottom:25px;
+}
+
+/* ================= OPTIONS ================= */
+
+.option{
+    border:2px solid #dce8e9;
+    background:#fbfefe;
+    padding:15px 18px;
+    border-radius:10px;
+    margin-bottom:12px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    transition:.2s;
+}
+
+.option:hover{
+    border-color:#0c9695;
+    background:#eefafa;
+}
+
+.option.selected{
+    border-color:#079b91;
+    background:#d9f5f1;
+}
+
+.option-letter{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#edf3f4;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+.option.selected .option-letter{
+    background:#079b91;
+    color:white;
+}
+
+/* ================= NAVIGATION ================= */
+
+.navigation{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:28px;
+}
+
+.nav-btn{
+    padding:12px 22px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:15px;
+}
+
+.previous{
+    background:#e8eeee;
+    color:#334155;
+}
+
+.next{
+    background:#078d8b;
+    color:white;
+}
+
+.submit{
+    background:#16804b;
+    color:white;
+}
+
+/* ================= PALETTE ================= */
+
+.palette-card{
+    background:white;
+    border-radius:14px;
+    padding:22px;
+    border:1px solid #d5eeee;
+    box-shadow:0 4px 15px rgba(0,0,0,.05);
+    height:fit-content;
+}
+
+.palette-card h3{
+    font-size:20px;
+    margin-bottom:18px;
+}
+
+.legend{
+    display:grid;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.legend-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+}
+
+.legend-box{
+    width:25px;
+    height:25px;
+    border-radius:6px;
+    border:1px solid #b9cacc;
+}
+
+.legend-box.answered{
+    background:#42b979;
+    border-color:#42b979;
+}
+
+.legend-box.not-answered{
+    background:#f8fafc;
+}
+
+.legend-box.review{
+    background:#5273df;
+    border-color:#5273df;
+}
+
+.legend-box.both{
+    background:#8d43c7;
+    border-color:#8d43c7;
+}
+
+.palette{
+    border-top:1px solid #e2eeee;
+    padding-top:18px;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+}
+
+.palette-btn{
+    width:45px;
+    height:42px;
+    border-radius:8px;
+    border:1px solid #b9cacc;
+    background:#f8fafc;
+    color:#172554;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.palette-btn:hover{
+    transform:translateY(-1px);
+}
+
+/* STATUS COLORS */
+
+.palette-btn.answered{
+    background:#42b979;
+    color:white;
+    border-color:#42b979;
+}
+
+.palette-btn.review{
+    background:#5273df;
+    color:white;
+    border-color:#5273df;
+}
+
+.palette-btn.answered-review{
+    background:#8d43c7;
+    color:white;
+    border-color:#8d43c7;
+}
+
+/* CURRENT QUESTION */
+
+.palette-btn.current{
+    outline:3px solid #078d8b;
+    outline-offset:2px;
+}
+
+/* ================= SUBMIT ================= */
+
+.palette-submit{
+    width:100%;
+    margin-top:22px;
+    padding:13px;
+    background:#078d8b;
+    color:white;
+    border:none;
+    border-radius:9px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* ================= TIP ================= */
+
+.tip{
+    margin-top:20px;
+    background:#ddf6f3;
+    border-radius:12px;
+    padding:18px;
+    color:#075e68;
+    line-height:1.5;
+}
+
+/* ================= START SCREEN ================= */
+
+.start-screen{
+    max-width:650px;
+    margin:60px auto;
+    background:white;
+    padding:40px;
+    text-align:center;
+    border-radius:16px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.start-screen h2{
+    font-size:30px;
+    margin-bottom:12px;
+}
+
+.start-screen p{
+    color:#64748b;
+    margin-bottom:25px;
+}
+
+.start-info{
+    background:#eefafa;
+    border-radius:10px;
+    padding:18px;
+    line-height:2;
+    margin-bottom:25px;
+}
+
+.start-btn{
+    background:#078d8b;
+    color:white;
+    border:none;
+    padding:14px 35px;
+    border-radius:9px;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* ================= RESULT ================= */
+
+.result-screen{
+    max-width:650px;
+    margin:50px auto;
+    background:white;
+    text-align:center;
+    padding:40px;
+    border-radius:16px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.score{
+    font-size:55px;
+    color:#078d8b;
+    font-weight:bold;
+    margin:20px;
+}
+
+.restart{
+    margin-top:25px;
+    background:#078d8b;
+    color:white;
+    border:none;
+    padding:13px 25px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.hidden{
+    display:none;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:850px){
+
+    .header{
+        flex-direction:column;
+        text-align:center;
     }
 
-    body {
-      background: #f4f6f9;
-      color: #222;
+    .exam-info{
+        flex-direction:column;
+        gap:20px;
     }
 
-    .header {
-      background: #172554;
-      color: white;
-      padding: 18px 25px;
-      text-align: center;
+    .stats{
+        width:100%;
+        justify-content:space-around;
+        gap:10px;
     }
 
-    .header h1 {
-      font-size: 25px;
+    .main-grid{
+        grid-template-columns:1fr;
     }
 
-    .header p {
-      margin-top: 5px;
-      font-size: 14px;
-      opacity: 0.9;
+    .palette-card{
+        order:2;
     }
 
-    .container {
-      max-width: 900px;
-      margin: 35px auto;
-      padding: 20px;
+}
+
+@media(max-width:500px){
+
+    .container{
+        padding:0 10px;
     }
 
-    .card {
-      background: white;
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    .question-card{
+        padding:18px;
     }
 
-    .start-screen {
-      text-align: center;
+    .question-text{
+        font-size:18px;
     }
 
-    .start-screen h2 {
-      font-size: 28px;
-      margin-bottom: 15px;
-      color: #172554;
+    .palette{
+        grid-template-columns:repeat(5,1fr);
     }
 
-    .start-screen p {
-      margin-bottom: 25px;
-      color: #555;
+    .palette-btn{
+        width:100%;
+        height:38px;
     }
 
-    .info {
-      background: #f1f5f9;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 25px;
-      line-height: 1.8;
+    .navigation{
+        gap:8px;
     }
 
-    button {
-      border: none;
-      border-radius: 8px;
-      padding: 12px 25px;
-      font-size: 16px;
-      cursor: pointer;
-      font-weight: bold;
+    .nav-btn{
+        padding:10px 13px;
     }
 
-    .start-btn {
-      background: #172554;
-      color: white;
-    }
-
-    .start-btn:hover {
-      background: #1e3a8a;
-    }
-
-    .quiz-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-      gap: 15px;
-    }
-
-    .question-number {
-      font-weight: bold;
-      color: #172554;
-    }
-
-    .timer {
-      background: #fee2e2;
-      color: #991b1b;
-      padding: 8px 15px;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-
-    .question {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 25px;
-      line-height: 1.5;
-    }
-
-    .option {
-      background: #f8fafc;
-      border: 2px solid #e2e8f0;
-      padding: 15px;
-      margin-bottom: 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .option:hover {
-      border-color: #172554;
-      background: #eff6ff;
-    }
-
-    .option.selected {
-      border-color: #172554;
-      background: #dbeafe;
-    }
-
-    .navigation {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-    }
-
-    .prev-btn {
-      background: #64748b;
-      color: white;
-    }
-
-    .next-btn {
-      background: #172554;
-      color: white;
-    }
-
-    .submit-btn {
-      background: #15803d;
-      color: white;
-    }
-
-    .result {
-      text-align: center;
-    }
-
-    .result h2 {
-      color: #172554;
-      margin-bottom: 20px;
-    }
-
-    .score {
-      font-size: 45px;
-      font-weight: bold;
-      margin: 20px;
-      color: #15803d;
-    }
-
-    .restart-btn {
-      background: #172554;
-      color: white;
-      margin-top: 20px;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        margin: 15px auto;
-        padding: 10px;
-      }
-
-      .card {
-        padding: 20px;
-      }
-
-      .quiz-header {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .question {
-        font-size: 18px;
-      }
-
-      .navigation {
-        gap: 10px;
-      }
-
-      button {
-        padding: 10px 15px;
-      }
-    }
-  </style>
+}
+</style>
 </head>
 
 <body>
 
-  <div class="header">
-    <h1>WISDOM EXAM WORKS</h1>
-    <p>Online Examination Portal</p>
-  </div>
+<!-- ================= START SCREEN ================= -->
 
-  <div class="container">
+<div id="startScreen">
 
-    <!-- START SCREEN -->
-    <div class="card start-screen" id="startScreen">
-      <h2>Online Quiz</h2>
-
-      <p>Test your knowledge with Wisdom Exam Works.</p>
-
-      <div class="info">
-        <div><strong>Total Questions:</strong> 5</div>
-        <div><strong>Time:</strong> 5 Minutes</div>
-        <div><strong>Each Question:</strong> 1 Mark</div>
-      </div>
-
-      <button class="start-btn" onclick="startQuiz()">
-        START QUIZ
-      </button>
+    <div class="header">
+        <div class="logo">
+            <h1>WISDOM EXAM WORKS</h1>
+            <p>Online Examination Portal</p>
+        </div>
     </div>
 
+    <div class="start-screen">
 
-    <!-- QUIZ SCREEN -->
-    <div class="card hidden" id="quizScreen">
+        <h2>General Knowledge Quiz</h2>
 
-      <div class="quiz-header">
-        <div class="question-number" id="questionNumber">
-          Question 1 of 5
+        <p>Test your knowledge with Wisdom Exam Works.</p>
+
+        <div class="start-info">
+            <div><b>Total Questions:</b> 10</div>
+            <div><b>Time:</b> 10 Minutes</div>
+            <div><b>Marks:</b> 1 Mark Each</div>
+            <div><b>Negative Mark:</b> No</div>
         </div>
 
-        <div class="timer" id="timer">
-          05:00
+        <button class="start-btn" onclick="startQuiz()">
+            START QUIZ
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= QUIZ SCREEN ================= -->
+
+<div id="quizScreen" class="hidden">
+
+    <div class="header">
+
+        <div class="logo">
+            <h1>WISDOM EXAM WORKS</h1>
+            <p>Online Examination Portal</p>
         </div>
-      </div>
 
-      <div class="question" id="questionText"></div>
+        <div class="timer-box">
 
-      <div id="options"></div>
+            <div class="timer" id="timer">
+                10:00
+            </div>
 
-      <div class="navigation">
+            <button class="end-btn" onclick="confirmSubmit()">
+                End Test
+            </button>
 
-        <button
-          class="prev-btn"
-          id="prevBtn"
-          onclick="previousQuestion()">
-          Previous
-        </button>
-
-        <button
-          class="next-btn"
-          id="nextBtn"
-          onclick="nextQuestion()">
-          Next
-        </button>
-
-        <button
-          class="submit-btn hidden"
-          id="submitBtn"
-          onclick="submitQuiz()">
-          Submit
-        </button>
-
-      </div>
+        </div>
 
     </div>
 
 
-    <!-- RESULT SCREEN -->
-    <div class="card result hidden" id="resultScreen">
+    <div class="container">
 
-      <h2>Quiz Completed 🎉</h2>
+        <!-- TOP INFORMATION -->
 
-      <p>Your Score</p>
+        <div class="exam-info">
 
-      <div class="score" id="score"></div>
+            <div class="exam-title">
+                <h2>General Knowledge - Mini Quiz</h2>
+                <p>Choose the correct answer.</p>
+            </div>
 
-      <p id="resultMessage"></p>
+            <div class="stats">
 
-      <button
-        class="restart-btn"
-        onclick="restartQuiz()">
-        TRY AGAIN
-      </button>
+                <div class="stat">
+                    <strong id="totalCount">10</strong>
+                    <span>Total Questions</span>
+                </div>
+
+                <div class="stat">
+                    <strong class="green-text" id="answeredCount">0</strong>
+                    <span>Answered</span>
+                </div>
+
+                <div class="stat">
+                    <strong class="red-text" id="notAnsweredCount">10</strong>
+                    <span>Not Answered</span>
+                </div>
+
+                <div class="stat">
+                    <strong class="blue-text" id="reviewCount">0</strong>
+                    <span>Marked for Review</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MAIN -->
+
+        <div class="main-grid">
+
+            <!-- QUESTION -->
+
+            <div class="question-card">
+
+                <div class="question-top">
+
+                    <div class="question-number" id="questionNumber">
+                        Question 1 of 10
+                    </div>
+
+                    <button
+                        class="mark-btn"
+                        id="markBtn"
+                        onclick="toggleReview()">
+
+                        🔖 Mark for Review
+
+                    </button>
+
+                </div>
+
+
+                <div class="question-text" id="questionText"></div>
+
+
+                <div id="options"></div>
+
+
+                <div class="navigation">
+
+                    <button
+                        class="nav-btn previous"
+                        onclick="previousQuestion()">
+
+                        ← Previous
+
+                    </button>
+
+
+                    <button
+                        class="nav-btn next"
+                        id="nextBtn"
+                        onclick="nextQuestion()">
+
+                        Next →
+
+                    </button>
+
+
+                    <button
+                        class="nav-btn submit hidden"
+                        id="submitBtn"
+                        onclick="confirmSubmit()">
+
+                        Submit Test
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUESTION PALETTE -->
+
+            <div class="palette-card">
+
+                <h3>Question Palette</h3>
+
+
+                <div class="legend">
+
+                    <div class="legend-row">
+                        <div class="legend-box answered"></div>
+                        Answered
+                    </div>
+
+                    <div class="legend-row">
+                        <div class="legend-box not-answered"></div>
+                        Not Answered
+                    </div>
+
+                    <div class="legend-row">
+                        <div class="legend-box review"></div>
+                        Marked for Review
+                    </div>
+
+                    <div class="legend-row">
+                        <div class="legend-box both"></div>
+                        Answered & Marked for Review
+                    </div>
+
+                </div>
+
+
+                <div class="palette" id="palette"></div>
+
+
+                <button
+                    class="palette-submit"
+                    onclick="confirmSubmit()">
+
+                    ✓ Submit Test
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="tip">
+
+            💡 <b>Tip:</b>
+            Use the Question Palette to navigate between questions
+            and mark questions for review.
+
+        </div>
 
     </div>
 
-  </div>
+</div>
 
 
-  <script>
+<!-- ================= RESULT ================= -->
 
-    // ==========================================
-    // QUIZ QUESTIONS
-    // ==========================================
+<div id="resultScreen" class="hidden">
 
-    const questions = [
+    <div class="header">
 
-      {
-        question: "What is the capital of India?",
-        options: [
-          "Mumbai",
-          "New Delhi",
-          "Kolkata",
-          "Chennai"
+        <div class="logo">
+            <h1>WISDOM EXAM WORKS</h1>
+            <p>Online Examination Portal</p>
+        </div>
+
+    </div>
+
+    <div class="result-screen">
+
+        <h2>Quiz Completed 🎉</h2>
+
+        <p>Your Score</p>
+
+        <div class="score" id="score">
+            0 / 10
+        </div>
+
+        <p id="resultMessage"></p>
+
+        <button
+            class="restart"
+            onclick="restartQuiz()">
+
+            Try Again
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================
+   QUESTIONS
+========================================= */
+
+const questions = [
+
+    {
+        question:"What is the capital of India?",
+        options:["Mumbai","New Delhi","Kolkata","Chennai"],
+        answer:1
+    },
+
+    {
+        question:"Which planet is known as the Red Planet?",
+        options:["Earth","Venus","Mars","Jupiter"],
+        answer:2
+    },
+
+    {
+        question:"Who is known as the Father of the Indian Constitution?",
+        options:[
+            "Mahatma Gandhi",
+            "Dr. B. R. Ambedkar",
+            "Jawaharlal Nehru",
+            "Sardar Patel"
         ],
-        answer: 1
-      },
+        answer:1
+    },
 
-      {
-        question: "Which planet is known as the Red Planet?",
-        options: [
-          "Earth",
-          "Venus",
-          "Mars",
-          "Jupiter"
+    {
+        question:"What is the national animal of India?",
+        options:["Lion","Elephant","Tiger","Leopard"],
+        answer:2
+    },
+
+    {
+        question:"Which is the largest planet in our Solar System?",
+        options:["Earth","Saturn","Jupiter","Neptune"],
+        answer:2
+    },
+
+    {
+        question:"Which is the longest river in India?",
+        options:["Yamuna","Ganga","Godavari","Narmada"],
+        answer:1
+    },
+
+    {
+        question:"What is the currency of Japan?",
+        options:["Won","Dollar","Yen","Euro"],
+        answer:2
+    },
+
+    {
+        question:"Which gas is most abundant in Earth's atmosphere?",
+        options:["Oxygen","Nitrogen","Carbon Dioxide","Hydrogen"],
+        answer:1
+    },
+
+    {
+        question:"Who wrote the National Anthem of India?",
+        options:[
+            "Rabindranath Tagore",
+            "Bankim Chandra Chattopadhyay",
+            "Sarojini Naidu",
+            "Subramania Bharati"
         ],
-        answer: 2
-      },
+        answer:0
+    },
 
-      {
-        question: "Who is known as the Father of the Indian Constitution?",
-        options: [
-          "Mahatma Gandhi",
-          "Dr. B. R. Ambedkar",
-          "Jawaharlal Nehru",
-          "Sardar Patel"
-        ],
-        answer: 1
-      },
-
-      {
-        question: "What is the national animal of India?",
-        options: [
-          "Lion",
-          "Elephant",
-          "Tiger",
-          "Leopard"
-        ],
-        answer: 2
-      },
-
-      {
-        question: "Which is the largest planet in our Solar System?",
-        options: [
-          "Earth",
-          "Saturn",
-          "Jupiter",
-          "Neptune"
-        ],
-        answer: 2
-      }
-
-    ];
-
-
-    // ==========================================
-    // VARIABLES
-    // ==========================================
-
-    let currentQuestion = 0;
-    let userAnswers = [];
-    let timeLeft = 300;
-    let timerInterval;
-
-
-    // ==========================================
-    // START QUIZ
-    // ==========================================
-
-    function startQuiz() {
-
-      currentQuestion = 0;
-      userAnswers = new Array(questions.length).fill(null);
-      timeLeft = 300;
-
-      document.getElementById("startScreen")
-        .classList.add("hidden");
-
-      document.getElementById("quizScreen")
-        .classList.remove("hidden");
-
-      showQuestion();
-
-      startTimer();
+    {
+        question:"How many planets are there in our Solar System?",
+        options:["7","8","9","10"],
+        answer:1
     }
 
+];
 
-    // ==========================================
-    // SHOW QUESTION
-    // ==========================================
 
-    function showQuestion() {
+/* =========================================
+   VARIABLES
+========================================= */
 
-      const q = questions[currentQuestion];
+let currentQuestion = 0;
 
-      document.getElementById("questionNumber").innerText =
+let userAnswers =
+    new Array(questions.length).fill(null);
+
+let markedForReview =
+    new Array(questions.length).fill(false);
+
+let timeLeft = 600;
+
+let timerInterval;
+
+
+/* =========================================
+   START
+========================================= */
+
+function startQuiz(){
+
+    currentQuestion = 0;
+
+    userAnswers =
+        new Array(questions.length).fill(null);
+
+    markedForReview =
+        new Array(questions.length).fill(false);
+
+    timeLeft = 600;
+
+    document
+        .getElementById("startScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("resultScreen")
+        .classList.add("hidden");
+
+    document
+        .getElementById("quizScreen")
+        .classList.remove("hidden");
+
+    createPalette();
+
+    showQuestion();
+
+    startTimer();
+
+}
+
+
+/* =========================================
+   SHOW QUESTION
+========================================= */
+
+function showQuestion(){
+
+    const q =
+        questions[currentQuestion];
+
+
+    document.getElementById("questionNumber")
+        .innerText =
         "Question " +
         (currentQuestion + 1) +
         " of " +
         questions.length;
 
-      document.getElementById("questionText").innerText =
+
+    document.getElementById("questionText")
+        .innerText =
         q.question;
 
-      const optionsContainer =
+
+    const options =
         document.getElementById("options");
 
-      optionsContainer.innerHTML = "";
+    options.innerHTML = "";
 
-      q.options.forEach((option, index) => {
 
-        const div = document.createElement("div");
+    q.options.forEach((option,index)=>{
+
+        const div =
+            document.createElement("div");
 
         div.className = "option";
 
-        if (userAnswers[currentQuestion] === index) {
-          div.classList.add("selected");
+
+        if(userAnswers[currentQuestion] === index){
+
+            div.classList.add("selected");
+
         }
 
-        div.innerText =
-          String.fromCharCode(65 + index) +
-          ". " +
-          option;
 
-        div.onclick = function() {
-          selectAnswer(index);
+        const letter =
+            document.createElement("div");
+
+        letter.className =
+            "option-letter";
+
+        letter.innerText =
+            String.fromCharCode(65 + index);
+
+
+        const text =
+            document.createElement("div");
+
+        text.innerText =
+            option;
+
+
+        div.appendChild(letter);
+
+        div.appendChild(text);
+
+
+        div.onclick = function(){
+
+            selectAnswer(index);
+
         };
 
-        optionsContainer.appendChild(div);
 
-      });
+        options.appendChild(div);
 
-
-      // Previous button
-
-      document.getElementById("prevBtn")
-        .style.visibility =
-        currentQuestion === 0 ? "hidden" : "visible";
+    });
 
 
-      // Last question
+    /* Mark button */
 
-      if (currentQuestion === questions.length - 1) {
+    const markBtn =
+        document.getElementById("markBtn");
 
-        document.getElementById("nextBtn")
-          .classList.add("hidden");
 
-        document.getElementById("submitBtn")
-          .classList.remove("hidden");
+    if(markedForReview[currentQuestion]){
 
-      } else {
+        markBtn.classList.add("marked");
 
-        document.getElementById("nextBtn")
-          .classList.remove("hidden");
+        markBtn.innerText =
+            "🔖 Marked for Review";
 
-        document.getElementById("submitBtn")
-          .classList.add("hidden");
+    }else{
 
-      }
+        markBtn.classList.remove("marked");
+
+        markBtn.innerText =
+            "🔖 Mark for Review";
 
     }
 
 
-    // ==========================================
-    // SELECT ANSWER
-    // ==========================================
+    /* Navigation */
 
-    function selectAnswer(index) {
+    if(currentQuestion === 0){
 
-      userAnswers[currentQuestion] = index;
+        document
+            .querySelector(".previous")
+            .style.visibility="hidden";
 
-      showQuestion();
+    }else{
+
+        document
+            .querySelector(".previous")
+            .style.visibility="visible";
 
     }
 
 
-    // ==========================================
-    // NEXT QUESTION
-    // ==========================================
+    if(currentQuestion === questions.length - 1){
 
-    function nextQuestion() {
+        document
+            .getElementById("nextBtn")
+            .classList.add("hidden");
 
-      if (currentQuestion < questions.length - 1) {
+        document
+            .getElementById("submitBtn")
+            .classList.remove("hidden");
+
+    }else{
+
+        document
+            .getElementById("nextBtn")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("submitBtn")
+            .classList.add("hidden");
+
+    }
+
+
+    updatePalette();
+
+    updateStats();
+
+}
+
+
+/* =========================================
+   SELECT ANSWER
+========================================= */
+
+function selectAnswer(index){
+
+    userAnswers[currentQuestion] =
+        index;
+
+    showQuestion();
+
+}
+
+
+/* =========================================
+   MARK REVIEW
+========================================= */
+
+function toggleReview(){
+
+    markedForReview[currentQuestion] =
+        !markedForReview[currentQuestion];
+
+    showQuestion();
+
+}
+
+
+/* =========================================
+   NEXT
+========================================= */
+
+function nextQuestion(){
+
+    if(currentQuestion <
+       questions.length - 1){
 
         currentQuestion++;
 
         showQuestion();
 
-      }
-
     }
 
+}
 
-    // ==========================================
-    // PREVIOUS QUESTION
-    // ==========================================
 
-    function previousQuestion() {
+/* =========================================
+   PREVIOUS
+========================================= */
 
-      if (currentQuestion > 0) {
+function previousQuestion(){
+
+    if(currentQuestion > 0){
 
         currentQuestion--;
 
         showQuestion();
 
-      }
-
     }
 
+}
 
-    // ==========================================
-    // TIMER
-    // ==========================================
 
-    function startTimer() {
+/* =========================================
+   PALETTE
+========================================= */
 
-      clearInterval(timerInterval);
+function createPalette(){
 
-      timerInterval = setInterval(function() {
+    const palette =
+        document.getElementById("palette");
 
-        timeLeft--;
+    palette.innerHTML = "";
 
-        updateTimer();
 
-        if (timeLeft <= 0) {
+    questions.forEach((q,index)=>{
 
-          clearInterval(timerInterval);
+        const btn =
+            document.createElement("button");
 
-          submitQuiz();
+        btn.className =
+            "palette-btn";
+
+        btn.innerText =
+            index + 1;
+
+
+        btn.onclick = function(){
+
+            currentQuestion = index;
+
+            showQuestion();
+
+        };
+
+
+        palette.appendChild(btn);
+
+    });
+
+}
+
+
+/* =========================================
+   UPDATE PALETTE
+========================================= */
+
+function updatePalette(){
+
+    const buttons =
+        document.querySelectorAll(".palette-btn");
+
+
+    buttons.forEach((btn,index)=>{
+
+        btn.className =
+            "palette-btn";
+
+
+        const answered =
+            userAnswers[index] !== null;
+
+        const review =
+            markedForReview[index];
+
+
+        if(answered && review){
+
+            btn.classList.add(
+                "answered-review"
+            );
+
+        }else if(review){
+
+            btn.classList.add(
+                "review"
+            );
+
+        }else if(answered){
+
+            btn.classList.add(
+                "answered"
+            );
 
         }
 
-      }, 1000);
 
-    }
+        if(index === currentQuestion){
+
+            btn.classList.add(
+                "current"
+            );
+
+        }
+
+    });
+
+}
 
 
-    function updateTimer() {
+/* =========================================
+   UPDATE STATS
+========================================= */
 
-      let minutes =
+function updateStats(){
+
+    let answered = 0;
+
+    let review = 0;
+
+
+    userAnswers.forEach(answer=>{
+
+        if(answer !== null){
+
+            answered++;
+
+        }
+
+    });
+
+
+    markedForReview.forEach(mark=>{
+
+        if(mark){
+
+            review++;
+
+        }
+
+    });
+
+
+    document.getElementById("answeredCount")
+        .innerText =
+        answered;
+
+
+    document.getElementById("notAnsweredCount")
+        .innerText =
+        questions.length - answered;
+
+
+    document.getElementById("reviewCount")
+        .innerText =
+        review;
+
+}
+
+
+/* =========================================
+   TIMER
+========================================= */
+
+function startTimer(){
+
+    clearInterval(timerInterval);
+
+
+    updateTimer();
+
+
+    timerInterval =
+        setInterval(()=>{
+
+            timeLeft--;
+
+            updateTimer();
+
+
+            if(timeLeft <= 0){
+
+                clearInterval(timerInterval);
+
+                submitQuiz();
+
+            }
+
+        },1000);
+
+}
+
+
+function updateTimer(){
+
+    let minutes =
         Math.floor(timeLeft / 60);
 
-      let seconds =
+    let seconds =
         timeLeft % 60;
 
-      minutes =
-        String(minutes).padStart(2, "0");
 
-      seconds =
-        String(seconds).padStart(2, "0");
+    document.getElementById("timer")
+        .innerText =
 
-      document.getElementById("timer").innerText =
-        minutes + ":" + seconds;
+        String(minutes).padStart(2,"0")
+        + ":" +
+        String(seconds).padStart(2,"0");
+
+}
+
+
+/* =========================================
+   CONFIRM SUBMIT
+========================================= */
+
+function confirmSubmit(){
+
+    const unanswered =
+        userAnswers.filter(
+            answer => answer === null
+        ).length;
+
+
+    let message =
+        "Are you sure you want to submit the test?";
+
+
+    if(unanswered > 0){
+
+        message +=
+            "\n\n" +
+            unanswered +
+            " question(s) are not answered.";
 
     }
 
 
-    // ==========================================
-    // SUBMIT QUIZ
-    // ==========================================
+    if(confirm(message)){
 
-    function submitQuiz() {
+        submitQuiz();
 
-      clearInterval(timerInterval);
+    }
 
-      let score = 0;
+}
 
-      questions.forEach((q, index) => {
 
-        if (userAnswers[index] === q.answer) {
-          score++;
+/* =========================================
+   SUBMIT
+========================================= */
+
+function submitQuiz(){
+
+    clearInterval(timerInterval);
+
+
+    let score = 0;
+
+
+    questions.forEach((q,index)=>{
+
+        if(userAnswers[index] === q.answer){
+
+            score++;
+
         }
 
-      });
+    });
 
-      document.getElementById("quizScreen")
+
+    document
+        .getElementById("quizScreen")
         .classList.add("hidden");
 
-      document.getElementById("resultScreen")
+
+    document
+        .getElementById("resultScreen")
         .classList.remove("hidden");
 
-      document.getElementById("score").innerText =
-        score + " / " + questions.length;
+
+    document
+        .getElementById("score")
+        .innerText =
+        score +
+        " / " +
+        questions.length;
 
 
-      let percentage =
+    const percentage =
         (score / questions.length) * 100;
 
 
-      if (percentage >= 80) {
+    if(percentage >= 80){
 
-        document.getElementById("resultMessage").innerText =
-          "Excellent! Keep up the great work! 🔥";
+        document
+            .getElementById("resultMessage")
+            .innerText =
+            "Excellent! Keep up the great work! 🔥";
 
-      } else if (percentage >= 50) {
+    }else if(percentage >= 50){
 
-        document.getElementById("resultMessage").innerText =
-          "Good job! Keep practising! 💪";
+        document
+            .getElementById("resultMessage")
+            .innerText =
+            "Good job! Keep practising! 💪";
 
-      } else {
+    }else{
 
-        document.getElementById("resultMessage").innerText =
-          "Keep learning and try again! 📚";
-
-      }
+        document
+            .getElementById("resultMessage")
+            .innerText =
+            "Keep learning and try again! 📚";
 
     }
 
+}
 
-    // ==========================================
-    // RESTART
-    // ==========================================
 
-    function restartQuiz() {
+/* =========================================
+   RESTART
+========================================= */
 
-      document.getElementById("resultScreen")
+function restartQuiz(){
+
+    document
+        .getElementById("resultScreen")
         .classList.add("hidden");
 
-      document.getElementById("startScreen")
+
+    document
+        .getElementById("startScreen")
         .classList.remove("hidden");
 
-    }
+}
 
-  </script>
+</script>
 
 </body>
 </html>
